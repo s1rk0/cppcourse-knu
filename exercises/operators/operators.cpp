@@ -5,16 +5,76 @@
 class Fraction {
  public:
   // TODO: constructors and operators
+  Fraction(int numerator, int denoninator):m_num(numerator), m_denom(denoninator){
+    normalize();
+  }
+  Fraction(int number):m_num(number), m_denom(1){}
+
+  //Stream
+  friend std::ostream& operator<<(std::ostream& os, const Fraction& f) {
+    return os << f.m_num << "/" << f.m_denom;
+  }
+
+  //Arithmetic operators
+  Fraction& operator*=(const Fraction& other) {
+    m_num *= other.m_num;
+    m_denom *= other.m_denom;
+    normalize();
+    return *this;
+  }
+  Fraction& operator*=(int scalar) {
+    m_num *= scalar;
+    normalize();
+    return *this;
+  }
+  friend Fraction operator*(Fraction left, int scalar){
+    return left *= scalar;
+  }
+  friend Fraction operator*(int scalar, const Fraction& right){
+    return right * scalar;
+  }
+  friend Fraction operator*(Fraction left, Fraction right){
+    return left*=right;
+  }
+
+  //Comparison operators
+  friend bool operator==(const Fraction& a, const Fraction& b) {
+    return a.m_num == b.m_num && a.m_denom == b.m_denom;
+  }
+
+  friend bool operator<(const Fraction& a, const Fraction& b) {
+    return static_cast<long long>(a.m_num) * b.m_denom < static_cast<long long>(b.m_num) * a.m_denom;
+  }
+
+  friend bool operator!=(const Fraction& a, const Fraction& b) {
+    return !(a == b);
+  }
+
+  friend bool operator>(const Fraction& a, const Fraction& b) {
+    return b < a;
+  }
+
+  friend bool operator<=(const Fraction& a, const Fraction& b) {
+    return !(a > b);
+  }
+
+  friend bool operator>=(const Fraction& a, const Fraction& b) {
+    return !(a < b);
+  }
 
  private:
   void normalize() {
+    if (m_denom<0){
+      m_num = -m_num;
+      m_denom = -m_denom;
+    }
     const int gcd = std::gcd(m_num, m_denom);
     m_num /= gcd;
     m_denom /= gcd;
   }
 
-  unsigned int m_num, m_denom;
-};
+  int m_num, m_denom;
+}; 
 
 // TODO: operators
 
