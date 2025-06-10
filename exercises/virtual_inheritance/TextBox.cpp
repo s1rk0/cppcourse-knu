@@ -15,4 +15,4 @@ Text::Text(int id, const std::string &content) :
 
 TextBox::TextBox(const std::string &content,
                  float width, float height) :
-    Rectangle(1, width, height), Text(2, content) {}
+    Drawable(3), Rectangle(1, width, height), Text(1, content){}

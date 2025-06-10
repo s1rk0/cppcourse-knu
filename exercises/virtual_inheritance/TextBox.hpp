@@ -10,7 +10,7 @@ private:
     int m_id;
 };
 
-class Rectangle : public Drawable {
+class Rectangle : virtual public Drawable {
 public:
     Rectangle(int id, float width, float height);
 protected:
@@ -18,7 +18,7 @@ protected:
     float m_height;
 };
 
-class Text : public Drawable {
+class Text : virtual public Drawable {
 public:
     Text(int id, const std::string &content);
 protected:
