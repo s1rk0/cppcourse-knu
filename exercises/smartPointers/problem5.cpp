@@ -1,5 +1,4 @@
-
-
+#include <memory>
 #include <iostream>
 #include <array>
 #include <vector>
@@ -44,8 +43,8 @@ class Owner {
 
   public:
 
-    Owner() : _largeObject( new LargeObject() ) {}
-    LargeObject * getLargeObject() const { return _largeObject.get() ; }
+  Owner() : _largeObject(std::make_shared<LargeObject>()) {}
+  std::shared_ptr<LargeObject> getLargeObject() const { return _largeObject; }
 
   private:
 
@@ -62,18 +61,20 @@ class Observer {
     Observer( const Owner & owner ) : _largeObject(owner.getLargeObject()) {}
 
     void setValue( double v ) {
-        if (_largeObject) { _largeObject->data[0] = v ; }
-        else { _largeObject->data[0] = 0. ; }
+        if (auto shared = _largeObject.lock()) {
+            shared->data[0] = v;}
     }
 
     double getValue() const {
-        if (_largeObject) { return _largeObject->data[0] ; }
+        if (auto shared = _largeObject.lock()) {
+            return shared->data[0];
+        }
         else { return -1. ; }
     }
 
   private:
 
-    LargeObject * _largeObject ;
+  std::weak_ptr<LargeObject> _largeObject;
 
 } ;
 

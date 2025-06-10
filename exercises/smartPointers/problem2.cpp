@@ -1,5 +1,4 @@
-
-
+#include <memory>
 #include <iostream>
 #include <array>
 #include <vector>
@@ -42,11 +41,12 @@ struct LargeObject {
 
 // A factory function to create large objects.
 
-LargeObject * newLargeObject() {
+std::unique_ptr<LargeObject> newLargeObject() {
+
 
     // MAKE YOUR CHANGES IN THIS FUNCTION
 
-    auto object = new LargeObject() ;
+    auto object = std::make_unique<LargeObject>() ;
     // Imagine there is more setup steps of "object" here
     // ...
     return object ;
@@ -67,16 +67,16 @@ void doStuff() {
 
     // MAKE YOUR CHANGES IN THIS FUNCTION
 
-    std::vector<LargeObject *> largeObjects ;
+    std::vector<std::unique_ptr<LargeObject>> largeObjects;
 
     for ( unsigned int i = 0 ; i < 10 ; ++i ) {
         auto newObj = newLargeObject() ;
         // ... additional newObj setup ...
-        largeObjects.push_back(newObj) ;
+        largeObjects.push_back(std::move(newObj));
     }
 
     for ( const auto & obj : largeObjects ) {
-        changeLargeObject(*obj) ;
+        changeLargeObject(*obj);
     }
 }
 
